@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Byte converter</title>
+        <meta charset="utf-8">
+        <style>
+body {
+    font-family: sans-serif;
+    font-size: 20px;
+}
+.row {
+    height: 2em;
+}
+.head {
+    height: 1.5em;
+    font-size: 1.25em;
+    font-weight: bold;
+}
+.mono {
+    font-family: monospace;
+    font-size: inherit;
+    border: 1px solid;
+}
+/* custom checkbox */
+label.switch > input {
+    display: none;
+}
+label.switch > div {
+    padding: 0 0.5em;
+    display: inline-block;
+    user-select: none;
+}
+label.switch > input:checked + div {
+    background-color: darkgray;
+}
+        </style>
+    </head>
+    <body>
+        <div class="row head">Byte converter</div>
+        <div class="row">Dec <input type="text" class="val mono" size="3" maxlength="3" data-base="10"></div>
+        <div class="row">Hex <input type="text" class="val mono" size="2" maxlength="2" data-base="16" data-pad="2"></div>
+        <div class="row">Bin <input type="text" class="val mono" size="8" maxlength="8" data-base="2" data-pad="8"></div>
+        <div class="row">
+            Bit
+            <label class="switch"><input type="checkbox" class="bit" value="7"><div class="mono">7</div></label>
+            <label class="switch"><input type="checkbox" class="bit" value="6"><div class="mono">6</div></label>
+            <label class="switch"><input type="checkbox" class="bit" value="5"><div class="mono">5</div></label>
+            <label class="switch"><input type="checkbox" class="bit" value="4"><div class="mono">4</div></label>
+            <label class="switch"><input type="checkbox" class="bit" value="3"><div class="mono">3</div></label>
+            <label class="switch"><input type="checkbox" class="bit" value="2"><div class="mono">2</div></label>
+            <label class="switch"><input type="checkbox" class="bit" value="1"><div class="mono">1</div></label>
+            <label class="switch"><input type="checkbox" class="bit" value="0"><div class="mono">0</div></label>
+        </div>
+        <script>
+const bits = [ ... document.querySelectorAll( '.bit' ) ], maxVal = ( 1 << bits.length ) - 1;
+const vals = [ ... document.querySelectorAll( '.val' ) ];
+const updVal = ( num ) => vals.forEach( e => e.value = num.toString( e.dataset.base ).padStart( e.dataset.pad, '0' ) );
+const calcBit = ( ev ) => {
+    const num = bits.filter( bit => bit.checked ).reduce( ( acc, bit ) => acc | ( 1 << bit.value ), 0 );
+    updVal( num );
+};
+const calcVal = ( ev ) => {
+    const el = ev.target;
+    let num = parseInt( el.value, el.dataset.base ) || 0;
+    if ( num < 0 ) num = 0;
+    if ( num > maxVal ) num = maxVal;
+    bits.forEach( bit => bit.checked = num & ( 1 << bit.value ) );
+    updVal( num );
+};
+bits.forEach( bit => bit.addEventListener( 'input', calcBit ) );
+vals.forEach( val => val.addEventListener( 'change', calcVal ) );
+        </script>
+    </body>
+</html>
