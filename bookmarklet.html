@@ -14,11 +14,11 @@
             <p>กดที่ลิงค์ข้างล่าง หรือลากลิงค์ข้างล่างไปใว้ใน bookmark bar เพื่อเก็บไว้ใช้ต่อไป</p>
         </div>
         <p>
-            <a href="javascript:(e=>e&&alert(e.replace(/\u0e33/g,'ํา').replace(/([\u0e48-\u0e4b])\u0e4d/g,'ํ$1').replace(/([\x21-\x7e\u0e2f\u0e30\u0e32\u0e40-\u0e46\u0e50-\u0e59]|[\u0e01-\u0e2e][\u0e31\u0e34-\u0e39\u0e47-\u0e4c\u0e4d]*)/g,'$1 ')))(prompt('ข้อความ'));">เ ว้ น ว ร ร ค</a>
+            <a href="javascript:(e=>e&&alert(e.replace(/\u0e33/g,'ํา').replace(/([\u0e48-\u0e4b])\u0e4d/g,'ํ$1').replace(/([\x21-\x7e\u0e2f\u0e30\u0e32\u0e40-\u0e46\u0e50-\u0e59]|[\u0e01-\u0e2e][\u0e31\u0e34-\u0e39\u0e47-\u0e4d]*)/g,'$1 ')))(prompt('ข้อความ'));">เ ว้ น ว ร ร ค</a>
         </p>
         <img src="img/spaceit.jpg">
         <p>
-            <a href="javascript:(x=>x&&alert(Object.entries([...x].map(x=>x.codePointAt(0).toString(16)).reduce((a,i)=>(a[i]=1+(a[i]||0),a),{})).map(([k,v])=>k+': '+v).join(`%0A`)))(prompt('Input'));">Unicode Inspector</a>
+            <a href="javascript:(x=>x&&alert(Object.entries([...x].map(x=>x.codePointAt(0).toString(16)).reduce((a,i)=>(a[i]=1+(a[i]||0),a),{})).map(([k,v])=>k+': '+v).join('%0A')))(prompt('Input'));">Unicode Inspector</a>
         </p>
     </body>
 </html>
