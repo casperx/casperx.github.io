@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Bit calculator</title>
+  <meta charset="utf-8">
+  <style>
+#size {
+  width: 3rem;
+}
+
+#wrap {
+  width: 24rem;
+  
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+}
+.row {
+  display: flex;
+}
+
+.label {
+  width: 4rem;
+}
+    </style>
+    <script type="module">
+const numText = document.querySelector('#num')
+const setText = document.querySelector('#set')
+const sizeText = document.querySelector('#size')
+
+const updateSet = () => {
+  const num = BigInt(numText.value)
+  const size = parseInt(sizeText.value)
+
+  let pos = 0
+  let mask = 1n
+
+  const sets = []
+
+  for (;;) {
+    // skip bit 0      
+    while (
+      pos < size && !(num & mask)
+    ) {
+      pos += 1
+      mask <<= 1n
+    }
+
+    // limit
+    if (pos === size) break
+
+    const start = pos
+
+    // skip bit 1
+    do {
+      pos += 1
+      mask <<= 1n
+    }
+    while (
+      pos < size && (num & mask)
+    )
+
+    // end bit is previous bit
+    const end = pos - 1
+
+    // add to result
+    sets.push(end === start ? `${start}` : `${start} - ${end}`)
+  }
+
+  setText.value = sets.join(', ')
+}
+
+const updateNum = () => {
+  const setsRaw = setText
+  	.value
+    .split(',')
+
+  let num = 0n
+
+  for (const setRaw of setsRaw) {
+  	const [startRaw, endRaw = startRaw] = setRaw.split('-')
+    
+    const start = BigInt(startRaw)
+    const end = BigInt(endRaw) 
+    
+    const bound = end + 1n
+    
+    // range
+    for (let i = start; i < bound; i += 1n)
+    	// accumulate
+    	num |= 1n << i
+  }
+
+  numText.value = '0x' + num.toString(16)
+}
+
+numText.addEventListener('change', updateSet)
+setText.addEventListener('change', updateNum)
+    </script>
+  </head>
+  <body>
+    <div id="wrap">
+      <div class="title">Bit calculator</div>
+      <div class="row">
+        <span class="label">Width</span> <input type="text" id="size" value="128">
+      </div>
+      <div class="row">
+        <span class="label">Mask</span> <input type="text" id="num">
+      </div>
+      <div class="row">
+        <span class="label">Bits</span> <input type="text" id="set">
+      </div>
+    </div>
+  </body>
+</html>
