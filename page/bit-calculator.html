@@ -77,13 +77,13 @@ const updateSet = () => {
 
 const updateNum = () => {
   const setsRaw = setText
-  	.value
+    .value
     .split(',')
 
   let num = 0n
 
   for (const setRaw of setsRaw) {
-  	const [startRaw, endRaw = startRaw] = setRaw.split('-')
+    const [startRaw, endRaw = startRaw] = setRaw.split('-')
     
     const start = BigInt(startRaw)
     const end = BigInt(endRaw) 
@@ -92,8 +92,8 @@ const updateNum = () => {
     
     // range
     for (let i = start; i < bound; i += 1n)
-    	// accumulate
-    	num |= 1n << i
+      // accumulate
+      num |= 1n << i
   }
 
   numText.value = '0x' + num.toString(16)
