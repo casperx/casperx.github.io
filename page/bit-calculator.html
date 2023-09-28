@@ -4,28 +4,39 @@
   <title>Bit calculator</title>
   <meta charset="utf-8">
   <style>
-#size {
-  width: 3rem;
+html {
+  color-scheme: dark light;
 }
 
 #wrap {
-  width: 24rem;
-  
   display: flex;
   flex-direction: column;
   row-gap: 0.5rem;
 }
 
-.title {
-  font-size: 20px;
-  font-weight: bold;
-}
 .row {
   display: flex;
 }
 
 .label {
   width: 4rem;
+}
+
+.input {
+  min-width: 16rem;
+  min-height: 6rem;
+  resize: vertical;
+
+  font-family: monospace;
+}
+
+#title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#size {
+  width: 3rem;
 }
     </style>
     <script type="module">
@@ -105,15 +116,18 @@ setText.addEventListener('change', updateNum)
   </head>
   <body>
     <div id="wrap">
-      <div class="title">Bit calculator</div>
+      <div id="title">Bit calculator</div>
       <div class="row">
-        <span class="label">Width</span> <input type="text" id="size" value="128">
+        <span class="label">Width</span>
+        <input type="text" id="size" value="64">
       </div>
       <div class="row">
-        <span class="label">Mask</span> <input type="text" id="num">
+        <span class="label">Mask</span>
+        <textarea id="num" class="input" autocomplete="off"></textarea>
       </div>
       <div class="row">
-        <span class="label">Bits</span> <input type="text" id="set">
+        <span class="label">Bits</span>
+        <textarea id="set" class="input" autocomplete="off"></textarea>
       </div>
     </div>
   </body>
