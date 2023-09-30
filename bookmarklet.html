@@ -18,7 +18,7 @@
     </p>
     <img src="img/spaceit.jpg">
     <p>
-      <a href="javascript:(x=>x&&alert(Object.entries([...x].map(x=>x.codePointAt(0).toString(16)).reduce((a,i)=>(a[i]=1+(a[i]||0),a),{})).map(([k,v])=>k+': '+v).join('%0A')))(prompt('Input'));">Unicode Inspector</a>
+      <a href="javascript:(x=>x&&alert(Object.entries([...x].map(x=>x.codePointAt(0).toString(16)).reduce((a,i)=>(a[i]=1+(a[i]||0),a),{})).map(([k,v])=>k+': '+v).join(`%0A`)))(prompt('Input'));">Unicode Inspector</a>
     </p>
   </body>
 </html>
