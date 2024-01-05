@@ -53,34 +53,31 @@ const updateSet = () => {
 
   const sets = []
 
-  for (;;) {
-    // skip bit 0      
-    while (
-      pos < size && !(num & mask)
-    ) {
-      pos += 1
-      mask <<= 1n
+  while (pos < size) {
+    // found bit 1
+    if (num & mask) {
+      // start bit is current bit
+      const start = pos
+
+      // skip consecutive bit 1
+      do {
+        pos += 1
+        mask <<= 1n
+      }
+      while (
+        pos < size && (num & mask)
+      )
+
+      // end bit is previous bit
+      const end = pos - 1
+
+      // add to result
+      sets.push(end === start ? `${start}` : `${start} - ${end}`)
     }
 
-    // limit
-    if (pos === size) break
-
-    const start = pos
-
-    // skip bit 1
-    do {
-      pos += 1
-      mask <<= 1n
-    }
-    while (
-      pos < size && (num & mask)
-    )
-
-    // end bit is previous bit
-    const end = pos - 1
-
-    // add to result
-    sets.push(end === start ? `${start}` : `${start} - ${end}`)
+    // skip bit 0
+    pos += 1
+    mask <<= 1n
   }
 
   setText.value = sets.join(', ')
@@ -90,21 +87,27 @@ const updateNum = () => {
   const setsRaw = setText
     .value
     .split(',')
+  const size = parseInt(sizeText.value)
 
   let num = 0n
 
   for (const setRaw of setsRaw) {
-    const [startRaw, endRaw = startRaw] = setRaw.split('-')
-    
-    const start = BigInt(startRaw)
-    const end = BigInt(endRaw) 
-    
-    const bound = end + 1n
-    
-    // range
-    for (let i = start; i < bound; i += 1n)
-      // accumulate
-      num |= 1n << i
+    const set = setRaw.trim()
+
+    if (set.length > 0) {
+      // split range
+      const [startRaw, endRaw = startRaw] = set.split('-')
+
+      let start = parseInt(startRaw)
+      let end = parseInt(endRaw) + 1n
+
+      // limit width
+      if (start > size) start = size
+      if (end > size) end = size
+
+      for (let i = start; i < end; i += 1n)
+        num |= 1n << BigInt(i)
+    }
   }
 
   numText.value = '0x' + num.toString(16)
@@ -116,7 +119,7 @@ setText.addEventListener('change', updateNum)
   </head>
   <body>
     <div id="wrap">
-      <div id="title">Bit calculator</div>
+      <div id="title">Bit mask Calculator</div>
       <div class="row">
         <span class="label">Width</span>
         <input type="text" id="size" value="64">
