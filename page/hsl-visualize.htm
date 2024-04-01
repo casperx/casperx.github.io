@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>HSL visualize</title>
+  <meta charset="utf-8">
+  <style>
+html {
+  color-scheme: dark light;
+}
+
+#chart polyline {
+  fill: none;
+}
+
+#chart rect {
+  width: 1.2px;
+  height: 100px;
+}
+
+#chart .flip {
+  transform: translateY(100px) scaleY(-1);
+}
+
+#chart .line {
+  stroke-width: 0.8px;
+}
+
+#chart .red {
+  stroke: rgb(255 0 0);
+}
+
+#chart .green {
+  stroke: rgb(0 255 0);
+}
+
+#chart .blue {
+  stroke: rgb(0 0 255);
+}
+
+#chart .stroke {
+  stroke: rgb(127 127 127);
+  stroke-width: 1.6px;
+}
+    </style>
+    <script type="module">
+const conv = (hue, sat, light) => {
+  const chroma = sat * Math.min(light, 1 - light)
+
+  const gen = (off) => {
+  	const reg = (off + hue / 30) % 12
+    const val = Math.min(reg - 3, 9 - reg)
+    const cap = Math.min(Math.max(val, -1), 1)
+
+  	return light - chroma * cap
+  }
+
+  return [
+    gen(0),
+    gen(8),
+    gen(4)
+  ]
+}
+
+const rLine = document.querySelector('#hue-r')
+const gLine = document.querySelector('#hue-g')
+const bLine = document.querySelector('#hue-b')
+
+const hueParent = document.querySelector('#hues')
+
+const inS = document.querySelector('#in-s')
+const inL = document.querySelector('#in-l')
+
+const hueRects = []
+
+for (let h = 0; h < 360; h += 1) {
+  const grad = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+
+  grad.setAttribute('x', `${h}`)
+  grad.setAttribute('y', '0')
+
+  hueRects.push(grad)
+}
+
+hueParent.append(... hueRects)
+
+const update = () => {
+  const
+    s = inS.valueAsNumber / 100,
+    l = inL.valueAsNumber / 100
+
+  const
+    r$ = '',
+    g$ = '',
+    b$ = ''
+
+  for (let h = 0; h < 360; h += 1) {
+    const [r, g, b] = conv(h, s, l)
+
+    r$ += ` ${h} ${r * 100}`
+    g$ += ` ${h} ${g * 100}`
+    b$ += ` ${h} ${b * 100}`
+
+    hueRects[h].setAttribute('fill', `rgb(${r * 255} ${g * 255} ${b * 255})`)
+  }
+
+  rLine.setAttribute('points', r$)
+  gLine.setAttribute('points', g$)
+  bLine.setAttribute('points', b$)
+}
+
+update()
+
+inS.addEventListener('input', update)
+inL.addEventListener('input', update)
+    </script>
+  </head>
+  <body>
+    <div>
+      Saturation <input type="range" min="0" max="100" value="100" id="in-s">
+    </div>
+    <div>
+      Luminance <input type="range" min="0" max="100" value="50" id="in-l">
+    </div>
+
+    <svg viewBox="0 0 360 100">
+      <defs>
+        <polyline id="hue-r" />
+        <polyline id="hue-g" />
+        <polyline id="hue-b" />
+      </defs>
+
+      <g id="hues"></g>
+
+      <g class="flip">
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#hue-r" class="stroke"></use>
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#hue-g" class="stroke"></use>
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#hue-b" class="stroke"></use>
+
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#hue-r" class="line red"></use>
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#hue-g" class="line green"></use>
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#hue-b" class="line blue"></use>
+      </g>
+    </svg>
+  </body>
+</html>
