@@ -99,13 +99,13 @@ const updateNum = () => {
       const [startRaw, endRaw = startRaw] = set.split('-')
 
       let start = parseInt(startRaw)
-      let end = parseInt(endRaw) + 1n
+      let end = parseInt(endRaw) + 1
 
       // limit width
       if (start > size) start = size
       if (end > size) end = size
 
-      for (let i = start; i < end; i += 1n)
+      for (let i = start; i < end; i += 1)
         num |= 1n << BigInt(i)
     }
   }
